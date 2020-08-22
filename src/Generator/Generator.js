@@ -178,7 +178,7 @@ export class Generator extends React.Component {
                     {message}
                 </div>
                 <div className="generator-refresh-button">
-                    <button onClick={this.refresh(style)}>refresh</button>
+                    <button className="generator-refresh-button-btn" onClick={this.refresh(style)}>New Item</button>
                 </div>
             </div>
         )

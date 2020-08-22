@@ -1,7 +1,7 @@
 {
   "name": "Menu Generator",
   "version": "1.0",
-  "manifest_version": 1,
+  "manifest_version": 2,
   "description": "Generates Silly Menu Items",
   "icons": {
       "512": "logo512.png"
