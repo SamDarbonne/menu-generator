@@ -1,174 +1,62 @@
 import React from 'react';
 import './Generator.scss'
-// import { generatorMap } from 'src/Generator/constants.js'
+import { samStyle, bigJuicyBootiesData, pyFieriData } from './constants.js'
 
 const generator = (data) => {
-    return Object.keys(data).map(key => data[key][Math.floor(Math.random() * data[key].length)]).join(' ')
+    return () => {
+        return Object.keys(data).map(key => data[key][Math.floor(Math.random() * data[key].length)]).join(' ')
+    }
 }
 
-const fieri = () => {
-    return generator(fieriData)
+const GeneratorMap = {
+    'Sam Style': generator(samStyle),
+    'Big Juicy Booties': generator(bigJuicyBootiesData),
+    'Py Fieri': generator(pyFieriData),
+    
 }
-
-const generatorMap = {
-    fieri
-}
-
-const fieriData = {
-    recipeDescriptor: [
-        'All-Rounder',
-        'Bazooka Joe\'s',
-        'Big Bad',
-        'Cadillac',
-        'Electric Cadillac',
-        'Everything But the Kitchen Sink',
-        'Slammin\'',
-        'Smoke em if you got em',
-        'Twistin\' the Night Away',
-        'You-kill-it-we-grill-it',
-        'Jamaican',
-        'Mediterranean',
-        'Ocean Inspired',
-        'Ayurvedic',
-        'Absolutely Insane',
-        'Flavor Blasted',
-        'Doritos Locos',
-        'XXX-tra Spicy',
-        'Livestock Guardian Breed',
-    ],
-    proteinAdjective: [
-        'Air-Chilled',
-        'Broasted',
-        'Brown Basted',
-        'Buffalo',
-        'Cajun Blackened',
-        'Charred',
-        'Coca-Cola Glazed',
-        'Cold',
-        'Heritage Breed',
-        'Island Roasted',
-        'Machine Washable',
-        'Okinawan',
-        'Original',
-        'Overboard',
-        'Spicy',
-        'Texas Style',
-        'Toasted',
-        'Wasabi Marinated',
-        'Flavor Injected',
-    ],
-    protein: [
-        'Beef',
-        'Pork',
-        'Chicken',
-        'Chinese Chicken',
-        'Carolina Whole Hog',
-        'Sausage',
-        'Tofu Buger',
-        'Burger',
-        'Bacon',
-        'Spam Cakes',
-        'Tuna',
-        'Halibut',
-        'Tilapia',
-        'Wagyu Steak',
-        'Brisket',
-        'Baby Back Ribs',
-        'St. Louis Ribs',
-        'Short Ribs',
-        'Ground Beef',
-        'Chicken of the Sea',
-        'Alligator',
-    ],
-    joiner: [
-        'with',
-        'Served on top of',
-        'Accompanied by',
-        'with a side of',
-        'alongside',
-        'and',
-        'plus',
-        'next to',
-        'beside',
-        'Served with'
-    ],
-    sideAdjective: [
-        'Attractive',
-        'Garden Fresh',
-        'Very Well Cooked',
-        'Professionally Designed',
-        'a Whopping Pile of',
-        'Just the Right Amount of',
-        'Blue Themed',
-        'Elevated',
-        'Deconstructed',
-        'Somewhat Off-Balance',
-        'a Tower of',
-        'Gorgeous',
-        'Lukewarm',
-        'Tableside',
-    ],
-    side: [
-        'Potatoes',
-        'Scallops',
-        'Butter',
-        'Candied Yams',
-        'Prosecco-Infused Pears',
-        'Collard Greens',
-        'Edamame',
-        'Samosas',
-        'Lumpia',
-        'Broccolini',
-        'Broccoli',
-        'Peas and Corn',
-        'Ambrosia Salad',
-        'Waldorf Salad',
-        'Potato Skins'
-    ],
-    priceSeparator: [
-        '-'
-    ],
-    price: [
-        '$6.66',
-        '$25',
-        '$43 (serves two)',
-        '$11.28',
-        '$6.66',
-        'market price',
-        '$25',
-        '$22',
-        '$27',
-        '$9.50 (under 12 only)',
-        '$24 (no sharing)',
-        '$18.40',
-        '$32',
-        '$5.99 (only on Tuesdays)',
-        '$10 (early bird special)'
-    ]
-}
+const GeneratorMapLength = Object.keys(GeneratorMap).length
 
 export class Generator extends React.Component {
     constructor(props) {
         super(props);
         
+        const defaultStyle = 'Sam Style'
+        
         this.state = {
-            message: generatorMap.fieri(),
-            style: 'fieri'
+            currentStyleIndex: 0,
+            message: GeneratorMap[defaultStyle](),
+            style: defaultStyle,
         };
     }
-    
 
     refresh = (style) => {
         return () => {
             this.setState({
-                message: generatorMap[style]()
+                message: GeneratorMap[style]()
             })
         }
+    }
+
+    changeStyle = (indexDelta) => {
+        const { currentStyleIndex } = this.state;
+        return () => {
+            if (currentStyleIndex + indexDelta === -1) {
+                this.setState({ currentStyleIndex: GeneratorMapLength - 1 });
+            } else if (currentStyleIndex + indexDelta === GeneratorMapLength) {
+                this.setState({ currentStyleIndex: 0});
+            } else {
+                this.setState({ currentStyleIndex: currentStyleIndex + indexDelta})
+            }
+        }
+        609-68-4688
+        
+       
     }
 
     render() {
 
         const {
+            currentStyleIndex,
             message,
             style,
         } = this.state;
@@ -178,7 +66,12 @@ export class Generator extends React.Component {
                     {message}
                 </div>
                 <div className="generator-refresh-button">
-                    <button className="generator-refresh-button-btn" onClick={this.refresh(style)}>New Item</button>
+                    <div className={'style-switcher-section'}>
+                        <button onClick={this.changeStyle(-1)}>{'<'}</button>
+                        <span>{Object.keys(GeneratorMap)[currentStyleIndex]}</span>
+                        <button onClick={this.changeStyle(1)}>{'>'}</button>
+                    </div>
+                    <button className="generator-refresh-button-btn" onClick={this.refresh(Object.keys(GeneratorMap)[currentStyleIndex])}>New Item</button>
                 </div>
             </div>
         )
