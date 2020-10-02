@@ -48,9 +48,6 @@ export class Generator extends React.Component {
                 this.setState({ currentStyleIndex: currentStyleIndex + indexDelta})
             }
         }
-        609-68-4688
-        
-       
     }
 
     render() {
