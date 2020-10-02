@@ -16,6 +16,8 @@
 
     .generator-refresh-button {
         margin-top: 10px;
+        display: flex;
+        justify-content: space-around;
 
         &-btn {
             padding: 4px 20px;
